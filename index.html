@@ -1,11 +1,25 @@
-<script src="Token.js"></script>
-<script src="Tokenizer.js"></script>
+
+<script src="src/AST/ASTNode.js"></script>
+<script src="src/AST/Scalar.js"></script>
+<script src="src/AST/ArrayNode.js"></script>
+<script src="src/AST/MO.js"></script>
+<script src="src/AST/Monad.js"></script>
+<script src="src/AST/Dyad.js"></script>
+
+<script src="src/Token.js"></script>
+<script src="src/Tokenizer.js"></script>
+<script src="src/Parser.js"></script>
 
 <script>
 
     const cs = console.log 
 
+    let ast = (new Parser(new Tokenizer("×⍨ 4.5 - (4 ¯3 5.6)"))).parse()
 
-    cs((new Tokenizer("5 -⍨ 3")).tokenize())
+    // MO(⍨ Monad(× Dyad(- S(4.5) S(4),S(-3),S(5.6))))
+    // MO(⍨ Monad(× Dyad(- S(4.5) A([S(4), S(-3), S(5.6)]))))
+    
+    cs(ast, ast.toString())
+
 
 </script>

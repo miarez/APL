@@ -29,7 +29,7 @@ class Token {
     ]
 
     static NUMS = "0123456789"
-    static WYSIWYG = "+-×÷()⍨"
+    static WYSIWYG = "+-×÷()⍨¯"
 
     static WYSIWYG_MAPPING = {
         "+": Token.PLUS,
@@ -39,6 +39,7 @@ class Token {
         "(": Token.LPARENS,
         ")": Token.RPARENS,
         "⍨": Token.COMMUTE,
+        "¯": Token.NEGATE 
     }
 
     constructor(type, value) {

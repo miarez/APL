@@ -10,6 +10,8 @@ class Tokenizer {
         let tokens = [this.get_next_token()]
 
         while (tokens[tokens.length - 1].type !== Token.EOF) {
+
+            cs(tokens)
             tokens.push(this.get_next_token())
         }
         return tokens.reverse()
@@ -39,20 +41,28 @@ class Tokenizer {
     }
 
     get_number_token() {
-        let parts = [this.get_integer()]
-
-        if (this.current_char === ".") {
-            this.advance()
-            parts.push(".")
-            parts.push(this.get_integer())
+        let parts = [];
+        
+        // Handle negation
+        if (this.current_char === "¯") {
+            parts.push("¯");
+            this.advance();
         }
-
-        parts = parts.reverse().join("")
-
+        
+        parts.push(this.get_integer());
+        
+        if (this.current_char === ".") {
+            this.advance();
+            parts.push(".");
+            parts.push(this.get_integer());
+        }
+    
+        parts = parts.reverse().join("");
+    
         if (parts.includes(".")) {
-            return new Token(Token.FLOAT, parseFloat(parts))
+            return new Token(Token.FLOAT, parseFloat(parts));
         } else {
-            return new Token(Token.INTEGER, parseInt(parts))
+            return new Token(Token.INTEGER, parseInt(parts));
         }
     }
 
@@ -79,6 +89,6 @@ class Tokenizer {
             return this.get_wysiwyg_token()
         }
 
-        this.error("Could not parse the next token...")
+        this.error(`Token of [${this.current_char}] Could Not Be Parsed`)
     }
 }
