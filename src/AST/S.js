@@ -1,5 +1,5 @@
 
-class Scalar extends ASTNode {
+class S extends ASTNode {
     constructor(
         token
     ){

@@ -1,5 +1,5 @@
 
-class ArrayNode extends ASTNode {
+class A extends ASTNode {
     constructor(
         children
     ){

@@ -1,8 +1,9 @@
 class Tokenizer {
 
     constructor(query) {
-        this.query = query
-        this.pos = this.query.length - 1 // LTR interpretation 
+        this.query  = query
+        this.len    = this.query.length
+        this.pos    = 0
         this.current_char = this.query[this.pos]
     }
 
@@ -10,11 +11,9 @@ class Tokenizer {
         let tokens = [this.get_next_token()]
 
         while (tokens[tokens.length - 1].type !== Token.EOF) {
-
-            cs(tokens)
             tokens.push(this.get_next_token())
         }
-        return tokens.reverse()
+        return [tokens[tokens.length - 1]].concat(tokens.slice(0, tokens.length - 1));
     }
 
     error(e) {
@@ -22,8 +21,8 @@ class Tokenizer {
     }
 
     advance() {
-        this.pos -= 1
-        this.current_char = this.pos < 0 ? null : this.query[this.pos]
+        this.pos += 1
+        this.current_char = this.pos > this.len ? null : this.query[this.pos]
     }
 
     skip_whitespace() {
@@ -33,11 +32,11 @@ class Tokenizer {
     }
 
     get_integer() {
-        let end_index = this.pos
+        let start_index = this.pos
         while (this.current_char && /\d/.test(this.current_char)) {
             this.advance()
         }
-        return this.query.slice(this.pos + 1, end_index + 1)
+        return this.query.slice(start_index, this.pos)
     }
 
     get_number_token() {
@@ -45,11 +44,11 @@ class Tokenizer {
         
         // Handle negation
         if (this.current_char === "¯") {
-            parts.push("¯");
             this.advance();
-        }
-        
+            parts.push("¯");
+        }        
         parts.push(this.get_integer());
+       
         
         if (this.current_char === ".") {
             this.advance();
@@ -57,7 +56,7 @@ class Tokenizer {
             parts.push(this.get_integer());
         }
     
-        parts = parts.reverse().join("");
+        parts = parts.join("");
     
         if (parts.includes(".")) {
             return new Token(Token.FLOAT, parseFloat(parts));
@@ -66,13 +65,24 @@ class Tokenizer {
         }
     }
 
+
+    get_id_token(){
+        let start = this.pos 
+        while(this.current_char && Token.ID_CHARS.includes(this.current_char)){
+            this.advance()
+        }
+        return new Token(Token.ID, this.query.slice(start, this.pos))
+    }
+
+
     get_wysiwyg_token() {
         let char = this.current_char
-        if (Token.WYSIWYG_MAPPING.hasOwnProperty(char)) {
-            this.advance()
+        this.advance()
+        try {
             return new Token(Token.WYSIWYG_MAPPING[char], char)
+        } catch(e){
+            this.error("Could not parse WYSIWYG token.")
         }
-        this.error("Could not parse WYSIWYG token.")
     }
 
     get_next_token() {
@@ -83,6 +93,10 @@ class Tokenizer {
 
         if (Token.NUMS.includes(this.current_char)) {
             return this.get_number_token()
+        }
+
+        if(Token.ID_CHARS.includes(this.current_char)){
+            return this.get_id_token()
         }
 
         if (Token.WYSIWYG.includes(this.current_char)) {

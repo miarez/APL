@@ -2,16 +2,16 @@
     // DYADIC FUNCTION
     class Dyad extends ASTNode {
         constructor(
-            token,
-            left,
-            right
+            fn, //ASTNode
+            alpha, //ASTNode
+            omega //ASTNode
         ){
             super()
-            this.token  = token            
-            this.left   = left
-            this.right  = right        
+            this.fn     = fn            
+            this.alpha  = alpha
+            this.omega  = omega        
         }
         toString(){
-            return `Dyad(${this.token.value} ${this.left} ${this.right})`
+            return `Dyad(${this.fn} ${this.alpha} ${this.omega})`
         }
     }

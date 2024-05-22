@@ -1,34 +1,43 @@
 class Token {
 
-    static INTEGER = "INTEGER"
-    static FLOAT = "FLOAT"
+    // Data types
+    static INTEGER  = "INTEGER"
+    static FLOAT    = "FLOAT"
+    static ID       = "ID"
 
-    static PLUS = "PLUS"
-    static MINUS = "MINUS"
-    static TIMES = "TIMES"
-    static DIVIDE = "DIVIDE"
+    // Functions
+    static PLUS     = "PLUS"
+    static MINUS    = "MINUS"
+    static TIMES    = "TIMES"
+    static DIVIDE   = "DIVIDE"
+    static CEILING  = "CEILING "
+    static FLOOR    = "FLOOR"
 
-    static NEGATE = "NEGATE"
+    // Operators
+    static COMMUTE  = "COMMUTE"
 
-    static COMMUTE = "COMMUTE"
-
-    static LPARENS = "LPARENS"
-    static RPARENS = "RPARENS"
-
-    static EOF = "EOF"
+    // Misc
+    static DIAMOND      = "DIAMOND "
+    static NEGATE       = "NEGATE"
+    static ASSIGNMENT   = "ASSIGNMENT "
+    static LPARENS      = "LPARENS"
+    static RPARENS      = "RPARENS"
+    static EOF          = "EOF"
 
     static FUNCTIONS = [
         Token.PLUS,
         Token.MINUS,
         Token.TIMES,
-        Token.DIVIDE
+        Token.DIVIDE,
+        Token.CEILING,
+        Token.FLOOR
     ]
 
     static MONADIC_OPS = [
         Token.COMMUTE
     ]
 
-    static NUMS = "0123456789"
+    static NUMS = "¯0123456789"
     static WYSIWYG = "+-×÷()⍨¯"
 
     static WYSIWYG_MAPPING = {
@@ -36,10 +45,23 @@ class Token {
         "-": Token.MINUS,
         "×": Token.TIMES,
         "÷": Token.DIVIDE,
+        "⌈": Token.CEILING,
+        "⌊": Token.FLOOR,
+        "⍨": Token.COMMUTE,
+        "←": Token.ASSIGNMENT,
         "(": Token.LPARENS,
         ")": Token.RPARENS,
-        "⍨": Token.COMMUTE,
-        "¯": Token.NEGATE 
+        "¯": Token.NEGATE,
+        "⋄": Token.DIAMOND         
+    }
+
+    static ID_CHARS = "_abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+
+
+    static EXPLAIN = {
+        COMMUTE : 
+        "The commute operator ⍨ reverses the arguments of the function it modifies."+
+        "For example, if f is a function, then x f⍨ y is equivalent to y f x."
     }
 
     constructor(type, value) {

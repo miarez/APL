@@ -2,15 +2,15 @@
     // MONADIC FUNCTION
     class Monad extends ASTNode {
         constructor(
-            token,
-            child
+            fn, // ASTNode
+            omega // ASTNode
         ){
             super()
-            this.token = token            
-            this.child = child
+            this.fn = fn            
+            this.omega = omega
         }
         toString(){
-            return `Monad(${this.token.value} ${this.child})`
+            return `Monad(${this.fn} ${this.omega})`
         }
     }
 
